@@ -39,6 +39,8 @@
    # 下载二进制文件（以 Linux x86_64 为例）
    wget https://github.com/wootile/wechat-proxy-go/releases/latest/download/wechat-proxy-linux-amd64 -O wechat-proxy
    
+   # 注意：部署脚本会在同目录查找 wechat-proxy 文件，请确保文件名正确
+   
    # 下载部署脚本
    wget https://raw.githubusercontent.com/wootile/wechat-proxy-go/main/deploy-offline.sh
    ```
