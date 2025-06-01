@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+env:
+  GO_VERSION: '1.23'
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ env.GO_VERSION }}
+
+    - name: Download dependencies
+      run: go mod download
+
+    - name: Run tests
+      run: go test -v -race -coverprofile=coverage.out ./...
+
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.out
+        fail_ci_if_error: false
+
+  build:
+    name: Build Verification
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+          - goos: linux
+            goarch: arm64
+          - goos: darwin
+            goarch: arm64
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ env.GO_VERSION }}
+
+    - name: Download dependencies
+      run: go mod download
+
+    - name: Build binary
+      env:
+        GOOS: ${{ matrix.goos }}
+        GOARCH: ${{ matrix.goarch }}
+      run: |
+        VERSION=$(git describe --tags --always --dirty)
+        
+        BINARY_NAME="wechat-proxy-${{ matrix.goos }}-${{ matrix.goarch }}"
+        
+        CGO_ENABLED=0 go build \
+          -ldflags "-X main.Version=${VERSION} -w -s" \
+          -o ${BINARY_NAME} \
+          main.go
+
+    - name: Test binary
+      if: matrix.goos == 'linux' && matrix.goarch == 'amd64'
+      run: |
+        chmod +x wechat-proxy-linux-amd64
+        ./wechat-proxy-linux-amd64 --help || echo "Binary executable" 

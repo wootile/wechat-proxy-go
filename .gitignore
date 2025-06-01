@@ -1,0 +1,77 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+wechat-proxy
+wechat-proxy-*
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+coverage.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
+
+# Build artifacts
+build/
+dist/
+release/
+
+# Logs
+*.log
+logs/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Configuration overrides (keep template config)
+# NOTE: config.json is the default configuration and SHOULD be tracked in git
+# Only ignore local overrides like config-local.json or config-dev.json
+config-local.json
+config-dev.json
+config-prod.json
+
+# Deployment packages
+*.tar.gz
+*.zip
+!wechat-proxy-deploy.tar.gz
+
+# Coverage reports
+coverage.html
+
+# Test artifacts
+test-results/
+test-output/
+
+# GitHub Release artifacts
+release_notes.md 
